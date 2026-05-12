@@ -1,0 +1,20 @@
+---
+- name: Deploy to Tomcat
+  hosts: web
+  become: yes
+
+  tasks:
+    - name: Copy WAR file to Tomcat
+      copy:
+        src: ../target/MavenAnsibleWebApp1.war
+        dest: /opt/tomcat/webapps/MavenAnsibleWebApp1.war
+        mode: '0644'
+        remote_src: no
+
+    - name: Restart Tomcat
+      shell: |
+        /opt/tomcat/bin/shutdown.sh || true
+        sleep 5
+        /opt/tomcat/bin/startup.sh
+
+# The 'shell' keyword must align with 'name' and 'copy'
